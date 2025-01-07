@@ -1,0 +1,21 @@
+# Python compiled files
+__pycache__/
+*.py[cod]
+
+# Vietual environment
+venv/
+env/
+
+# IDE settings
+.vscode/
+.idea/
+
+# Environment variables
+.env
+
+# music dir
+/music_check/*.mp3
+/music_library/*.mp3
+
+# music npx
+*.npx
