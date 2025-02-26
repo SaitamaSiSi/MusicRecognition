@@ -4,6 +4,7 @@ from flask import Flask
 
 from librosaHelper import LibrosaHelper
 from audioFluxHelper import AudioFluxHelper
+from scikit_learn.ScikitLearn import test as scikit_test
 
 # 创建Flask应用实例
 app = Flask(__name__)
@@ -21,28 +22,45 @@ def print_hi(name):
     print(f'Hi, {name}')  # 按 Ctrl+F8 切换断点。
 
 
-# 仅加入音频节奏比较，还需要MFCC、音频指纹等
-if __name__ == '__main__':
-    # app.run(host='0.0.0.0', port=5000)
+def run_api_test():
+    app.run(host='0.0.0.0', port=5000)
 
-    lib_name = 'musicLibrary'
-    source_dir = 'music_library'
+
+def music_librosa_test():
     target_mp3 = os.path.join('music_check', "Test.mp3")
 
     # librosa库
     print('Librosa start')
-    librosa_lib_name = lib_name + 'ByLibrosa'
-    librosaHelper = LibrosaHelper(librosa_lib_name)
-    librosaHelper.generate_music_library(source_dir)
-    librosaHelper.find_music(target_mp3)
+    librosa_helper = LibrosaHelper('musicLibraryByLibrosa')
+    librosa_helper.generate_music_library('music_library')
+    librosa_helper.find_music(target_mp3)
     print('Librosa end')
 
-    # audioflux库, 暂未实现
-    # print('Audioflux start')
-    # audioflux_lib_name = lib_name + 'ByAudioflux'
-    # audiofluxHelper = AudioFluxHelper(audioflux_lib_name)
-    # audiofluxHelper.generate_music_library(source_dir)
-    # audiofluxHelper.find_music(target_mp3)
-    # print('Audioflux end')
 
-# 访问 https://www.jetbrains.com/help/pycharm/ 获取 PyCharm 帮助
+def music_audioflux_test():
+    target_mp3 = os.path.join('music_check', "Test.mp3")
+
+    # audioflux库, 暂未实现
+    print('Audioflux start')
+    audioflux_helper = AudioFluxHelper('musicLibraryByAudioflux')
+    audioflux_helper.generate_music_library('music_library')
+    audioflux_helper.find_music(target_mp3)
+    print('Audioflux end')
+
+
+def scikit_learn_test():
+    scikit_test()
+
+
+# 仅加入音频节奏比较，还需要MFCC、音频指纹等
+if __name__ == '__main__':
+    # run_api_test()
+    # music_librosa_test()
+    # music_audioflux_test()
+    scikit_learn_test()
+
+    print(f'Program Finished!')
+
+
+
+

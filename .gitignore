@@ -17,5 +17,8 @@ env/
 /music_check/*.mp3
 /music_library/*.mp3
 
+/qrcode/*.png
+/qrcode/*.txt
+
 # music npx
 *.npx
