@@ -4,7 +4,7 @@ from flask import Flask
 
 from librosaHelper import LibrosaHelper
 from audioFluxHelper import AudioFluxHelper
-from scikit_learn.ScikitLearn import test as scikit_test
+from scikit_learn.scikitLearn import test as scikit_test1, test2 as scikit_test2
 
 # 创建Flask应用实例
 app = Flask(__name__)
@@ -49,7 +49,8 @@ def music_audioflux_test():
 
 
 def scikit_learn_test():
-    scikit_test()
+    # scikit_test1()
+    scikit_test2()
 
 
 # 仅加入音频节奏比较，还需要MFCC、音频指纹等

@@ -3,10 +3,13 @@
 
 import numpy as np
 import pandas as pd
+import matplotlib as mpl
+import matplotlib.pyplot as plt
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error
+from scikit_learn.kMeans import KMeans
 
 
 # 生成推荐
@@ -61,11 +64,6 @@ def test():
     data['前一周总花费'] = data['当日花费'].rolling(window=7).sum()
     data['目标'] = data['当日花费'].shift(-1)
 
-    # 顾客购物订单数据集 order.csv
-    # data = pd.read_csv("./scikit_learn/order.csv")
-    # 选取每个顾客所购买各个商品所占的比重信息来进行聚类
-    # data = data.iloc[:, -8:]
-
     print(data.head())
 
     # 删除缺失值
@@ -102,6 +100,48 @@ def test():
     # 预测下一天的花费
     predicted_spending = model.predict(latest_data)
     print(f"预测下一天的花费: {predicted_spending[0]:.2f}元")
+
+
+def test2():
+    # 加载数据
+
+    # 顾客购物订单数据集 order.csv
+    data = pd.read_csv("./scikit_learn/order.csv")
+    # 选取每个顾客所购买各个商品所占的比重信息来进行聚类
+    t = data.iloc[:, -8:]
+    print(t)
+
+    kmeans = KMeans(3, 50)
+    kmeans.fit(t)
+    print(kmeans.cluster_centers_)
+    # 查看某个簇的所有样本数据。
+    print(t[kmeans.labels_ == 0])
+
+    # 简单进行预测
+    kmeans.predict([[30, 30, 40, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 30, 30, 40], [30, 30, 0, 0, 0, 0, 20, 20]])
+
+    t2 = data.loc[:, "Food%":"Fresh%"]
+    kmeans = KMeans(3, 50)
+    kmeans.fit(t2)
+
+    # 如果想显示中文的话，可以看这一段，默认情况下，matplotlib不支持中文显示，进行以下设置
+    # 设置字体为黑体，以支持中文显示
+    mpl.rcParams['font.family'] = 'SimHei'
+    # 设置在中文字体时，能够正常的显示负号（-）
+    mpl.rcParams['axes.unicode_minus'] = False
+
+    plt.figure(figsize=(10, 10))
+    # 绘制每个类别的散点图
+    plt.scatter(t2[kmeans.labels_ == 0].iloc[:, 0], t2[kmeans.labels_ == 0].iloc[:, 1], label='Category 1')
+    plt.scatter(t2[kmeans.labels_ == 1].iloc[:, 0], t2[kmeans.labels_ == 1].iloc[:, 1], label='Category 2')
+    plt.scatter(t2[kmeans.labels_ == 2].iloc[:, 0], t2[kmeans.labels_ == 2].iloc[:, 1], label='Category 3')
+    # 绘制聚类中心
+    plt.scatter(kmeans.cluster_centers_[:, 0], kmeans.cluster_centers_[:, 1], marker='+', s=300)
+    plt.title('Cluster analysis of food and meat purchases')
+    plt.xlabel('food')
+    plt.ylabel('meat')
+    plt.legend()
+    plt.show()
 
 
 if __name__ == "__main__":
